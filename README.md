@@ -1,51 +1,166 @@
 # Lab 5: Static Code Analysis — Parking Lot System
 
-**Your file:** `parking_lot_system.py`
+A Python parking lot management program analyzed and improved using **Pylint, Bandit, and Flake8**.
 
-Follow the lab handout for the full instructions.
+## Overview
 
-## About the program
+This project demonstrates how static code analysis can improve Python code quality, security, readability, and maintainability.
 
-An automated parking lot and slot manager. It parks vehicles by license plate, frees occupied slots, computes dynamic surge rates, and exports parking manifests.
+The original program contained several issues, including unsafe expression evaluation, weak hashing, insecure random number generation, broad exception handling, mutable default arguments, and style violations.
 
-The code works, but only just. It has quality, style and security problems of the kind Pylint, Flake8 and Bandit are built to find.
+The code was refactored to address these findings while preserving the core parking lot functionality.
 
-## What to do
+## Features
 
-1. **Run it first** and read the output carefully:
-   ```bash
-   python parking_lot_system.py
-   ```
-   It asks one question. Press Enter to use the default, then try a few inputs of your own. Not every problem in this file is something a tool will flag, so pay attention to output that looks wrong.
+- Park vehicles in available parking slots.
+- Release occupied parking slots.
+- Check parking slot availability.
+- Calculate parking fees using a surge multiplier.
+- Generate SHA-256 hashes for vehicle registration numbers.
+- Generate four-digit ticket PINs using Python's `secrets` module.
+- Export parking slot information to a manifest file.
+- Count available parking slots.
 
-2. **Install the tools:**
-   ```bash
-   pip install pylint bandit flake8
-   ```
+## Technology Stack
 
-3. **Run the analysis** and save the reports:
-   ```bash
-   pylint parking_lot_system.py > pylint_report.txt
-   bandit -r parking_lot_system.py > bandit_report.txt
-   flake8 parking_lot_system.py > flake8_report.txt
-   ```
+- **Language:** Python 3
+- **Static analysis:** Pylint, Bandit, Flake8
+- **Version control:** Git and GitHub
 
-4. **Document the issues** in `issues.md` using this table (at least 4 rows, high and medium severity first):
+## Project Structure
 
-   | Issue | Type | Line(s) | Description | Fix Approach |
-   |-------|------|---------|-------------|--------------|
-   | ... | ... | ... | ... | ... |
+```text
+L5_51_parking_lot_system/
+├── parking_lot_system.py
+├── issues.md
+├── reflection.md
+├── pylint_report_before.txt
+├── pylint_report_after.txt
+├── bandit_report_before.txt
+├── bandit_report_after.txt
+├── flake8_report_before.txt
+├── flake8_report_after.txt
+├── README.md
+└── parking_manifest.txt   # Generated at runtime
+```
 
-5. **Fix the code.** Fix at least 4 of the issues you documented, then rerun all three tools to confirm they are gone. Repeat until you are satisfied. The program should still do its job when you are done.
+## Setup and Execution
 
-6. **Reflect.** Answer the four reflection questions from the handout in `reflection.md`.
+### 1. Clone the repository
 
-## Deliverables
+```bash
+git clone https://github.com/Dhruva-Girish/L5_51_parking_lot_system.git
+cd L5_51_parking_lot_system
+```
 
-1. `parking_lot_system.py`: your cleaned version, with at least 4 issues fixed.
-2. `issues.md`: the completed issue table.
-3. `reflection.md`: your answers to the reflection questions.
+### 2. Create and activate a virtual environment
 
-**Target:** aim for a Pylint score above 9.5 on your final file. A perfect 10.00/10 is very good.
+On macOS or Linux:
 
-Be ready to explain the bugs you found and how you fixed them. You may be called on to present.
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install the analysis tools
+
+```bash
+python -m pip install pylint bandit flake8
+```
+
+### 4. Run the program
+
+```bash
+python parking_lot_system.py
+```
+
+The program demonstrates parking operations, availability checks, surge fee calculation, vehicle hashing, ticket PIN generation, and manifest export.
+
+## Static Code Analysis
+
+The program was analyzed using three tools.
+
+### Pylint — Code Quality
+
+Pylint identifies code-quality issues, naming violations, unused variables, missing documentation, and potentially error-prone programming practices.
+
+Run:
+
+```bash
+pylint parking_lot_system.py
+```
+
+### Bandit — Security Analysis
+
+Bandit detects common security issues in Python source code.
+
+Run:
+
+```bash
+bandit -r parking_lot_system.py
+```
+
+### Flake8 — Style and Formatting
+
+Flake8 checks Python style conventions, whitespace, line length, and related violations.
+
+Run:
+
+```bash
+flake8 parking_lot_system.py
+```
+
+## Issues Identified and Fixed
+
+The original code was improved by addressing the following issues:
+
+| Issue | Fix |
+|---|---|
+| Mutable default argument | Replaced the shared list default with `None` and initialized the list inside the function. |
+| Bare exception handler | Removed broad exception suppression and explicitly checked whether a parking slot exists. |
+| Unsafe `eval()` usage | Replaced arbitrary expression evaluation with direct arithmetic using a surge multiplier. |
+| Weak MD5 hashing | Replaced MD5 with SHA-256. |
+| Shell command execution | Removed `os.system()` and used Python's `print()` function. |
+| Insecure random number generation | Replaced `random.randint()` with `secrets.randbelow()`. |
+| Naming and documentation issues | Renamed functions using `snake_case` and added docstrings. |
+| Formatting and unused code | Removed unused imports and variables and corrected formatting issues. |
+
+For more details, see [`issues.md`](issues.md).
+
+## Final Analysis Results
+
+| Tool | Final Result |
+|---|---|
+| Pylint | **10.00/10** |
+| Bandit | **0 issues identified** |
+| Flake8 | **0 violations reported** |
+
+The program was executed after the changes to verify that its demonstrated functionality continued to work.
+
+The before-and-after report files are included in the repository for comparison.
+
+## Reflection
+
+This lab demonstrated how different static analysis tools complement one another:
+
+- Pylint helps improve code quality and maintainability.
+- Bandit helps identify potentially insecure coding patterns.
+- Flake8 enforces consistent formatting and style.
+
+Using these tools together makes code easier to review and maintain. Static analysis complements, but does not replace, functional testing and security review.
+
+See [`reflection.md`](reflection.md) for the lab reflection.
+
+## Learning Outcomes
+
+- Understand the purpose of static code analysis.
+- Identify and fix common Python programming issues.
+- Use Pylint, Bandit, and Flake8 to analyze source code.
+- Interpret analysis reports and prioritize findings.
+- Verify improvements through repeated analysis and program execution.
+
+---
+
+**Lab:** 5 — Static Code Analysis  
+**Program:** Parking Lot System  
+**Status:** Completed
